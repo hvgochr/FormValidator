@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
+import "./App.css";
+
 const schema = z.object({
   firstName: z
     .string()
@@ -31,7 +33,7 @@ const App = () => {
   });
 
   const onSubmit = (data: FormValues) => {
-    console.log(JSON.stringify(data, null, 2));
+    console.log(JSON.stringify(data));
   };
 
   return (
@@ -42,36 +44,26 @@ const App = () => {
           <label htmlFor="firstName">Prénom</label>
           <input type="text" id="firstName" {...register("firstName")} />
           {errors.firstName && (
-            <div style={{ color: "red" }}>{errors.firstName.message}</div>
+            <div className="error">{errors.firstName.message}</div>
           )}
         </div>
         <div>
           <label htmlFor="email">Email</label>
           <input type="email" id="email" {...register("email")} />
-          {errors.email && (
-            <div style={{ color: "red" }}>{errors.email.message}</div>
-          )}
+          {errors.email && <div className="error">{errors.email.message}</div>}
         </div>
         <div>
           <label htmlFor="password">Password</label>
           <input type="password" id="password" {...register("password")} />
           {errors.password && (
-            <div style={{ color: "red" }}>{errors.password.message}</div>
-          )}
-          {errors.password && errors.password.type === "min" && (
-            <div style={{ color: "red" }}>
-              Le mot de passe doit contenir au moins 8 caractères
-            </div>
-          )}
-          {errors.password && errors.password.type === "max" && (
-            <div style={{ color: "red" }}>
-              Le mot de passe doit contenir au plus 20 caractères
-            </div>
-          )}
-          {errors.password && errors.password.type === "regex" && (
-            <div style={{ color: "red" }}>
-              Le mot de passe doit contenir au moins une minuscule, une
-              majuscule, un chiffre et un caractère spécial
+            <div className="error">
+              {errors.password.message ||
+                (errors.password.type === "min" &&
+                  "Le mot de passe doit contenir au moins 8 caractères") ||
+                (errors.password.type === "max" &&
+                  "Le mot de passe doit contenir au plus 20 caractères") ||
+                (errors.password.type === "regex" &&
+                  "Le mot de passe doit contenir au moins une minuscule, une majuscule, un chiffre et un caractère spécial")}
             </div>
           )}
         </div>
